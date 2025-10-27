@@ -135,9 +135,9 @@ export default function LoginScreen() {
           {/* Demo Credentials */}
           <View style={styles.credentialsBox}>
             <Text style={styles.credentialsTitle}>✅ Verified Working Credentials:</Text>
-            <Text style={styles.credentialsItem}>🔐 Member: testmember@hyphenwellness.com / test123</Text>
-            <Text style={styles.credentialsItem}>👤 Admin: admin@hyphenwellness.com / admin123</Text>
-            <Text style={styles.credentialsItem}>🏢 Reception: reception@hyphenwellness.com / reception123</Text>
+            <Text style={styles.credentialsItem}>🔐 Member: member@hypgym.com / test123</Text>
+            <Text style={styles.credentialsItem}>👤 Admin: admin@hypgym.com / admin123</Text>
+            <Text style={styles.credentialsItem}>🏢 Reception: reception@hypgym.com / reception123</Text>
             <Text style={styles.credentialsNote}>
               💡 Or create a new account by clicking "Sign up here"
             </Text>

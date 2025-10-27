@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authAPI } from '../services/api';
 import { User } from '../types';
+import { API_URL } from '../config/constants';
 
 interface AuthContextType {
   user: User | null;
@@ -53,26 +54,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     try {
+      console.log('🚀 Attempting login for:', email);
+      console.log('🚀 API URL:', API_URL);
+      
       const response = await authAPI.login({ email, password });
-      const { user: userData, token: authToken } = response.data.data;
+      console.log('🚀 Login response received:', response.status);
+      
+      if (response.data.success) {
+        const { user: userData, token: authToken } = response.data.data;
 
-      // Handle both id and _id fields
-      const userWithId = {
-        ...userData,
-        id: userData.id || userData._id,
-        _id: userData._id || userData.id,
-      };
+        await AsyncStorage.setItem('token', authToken);
+        await AsyncStorage.setItem('user', JSON.stringify(userData));
 
-      await AsyncStorage.setItem('token', authToken);
-      await AsyncStorage.setItem('user', JSON.stringify(userWithId));
+        setUser(userData);
+        setToken(authToken);
+        setIsAuthenticated(true);
 
-      setUser(userWithId);
-      setToken(authToken);
-      setIsAuthenticated(true);
-
-      return { success: true };
+        return { success: true };
+      } else {
+        return { success: false, message: response.data.message || 'Login failed' };
+      }
     } catch (error: any) {
-      const message = error.response?.data?.message || 'Login failed';
+      console.error('❌ Login error:', error);
+      console.error('❌ Error type:', error.constructor.name);
+      console.error('❌ Error message:', error.message);
+      console.error('❌ Error code:', error.code);
+      console.error('❌ Response:', error.response?.data);
+      const message = error.response?.data?.message || error.message || 'Login failed';
       return { success: false, message };
     }
   };

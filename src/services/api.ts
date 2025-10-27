@@ -4,9 +4,12 @@ import { API_URL } from '../config/constants';
 
 const api = axios.create({
   baseURL: API_URL,
-  timeout: 10000,
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
+  },
+  validateStatus: function (status) {
+    return status >= 200 && status < 500;
   },
 });
 
@@ -43,8 +46,10 @@ api.interceptors.response.use(
 
 // Auth API
 export const authAPI = {
-  login: (credentials: { email: string; password: string }) =>
-    api.post('/auth/login', credentials),
+  login: async (credentials: { email: string; password: string }) => {
+    console.log('🚀 Making login request to:', `${API_URL}/auth/login`);
+    return api.post('/auth/login', credentials);
+  },
   
   register: (userData: any) =>
     api.post('/auth/register', userData),
