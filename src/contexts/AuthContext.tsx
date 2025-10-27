@@ -57,11 +57,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.log('🚀 Attempting login for:', email);
       console.log('🚀 API URL:', API_URL);
       
-      const response = await authAPI.login({ email, password });
-      console.log('🚀 Login response received:', response.status);
+      // Use native fetch to bypass iOS security restrictions
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
       
-      if (response.data.success) {
-        const { user: userData, token: authToken } = response.data.data;
+      console.log('🚀 Login response status:', response.status);
+      
+      const data = await response.json();
+      console.log('🚀 Login data:', data);
+      
+      if (data.success) {
+        const { user: userData, token: authToken } = data.data;
 
         await AsyncStorage.setItem('token', authToken);
         await AsyncStorage.setItem('user', JSON.stringify(userData));
@@ -72,15 +83,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         return { success: true };
       } else {
-        return { success: false, message: response.data.message || 'Login failed' };
+        return { success: false, message: data.message || 'Login failed' };
       }
     } catch (error: any) {
       console.error('❌ Login error:', error);
       console.error('❌ Error type:', error.constructor.name);
       console.error('❌ Error message:', error.message);
-      console.error('❌ Error code:', error.code);
-      console.error('❌ Response:', error.response?.data);
-      const message = error.response?.data?.message || error.message || 'Login failed';
+      const message = error.message || 'Login failed';
       return { success: false, message };
     }
   };
