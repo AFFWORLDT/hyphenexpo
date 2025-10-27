@@ -4,5 +4,3 @@ export const CONFIG = {
   API_URL,
   TIMEOUT: 10000,
 };
-
-

@@ -88,8 +88,8 @@ export const checkinAPI = {
   getTodaySessions: () =>
     api.get('/checkin/today'),
   
-  getHistory: (params?: any) =>
-    api.get('/checkin/history', { params }),
+  getHistory: (memberId: string, params?: any) =>
+    api.get(`/checkin/member/${memberId}/history`, { params }),
 };
 
 export default api;

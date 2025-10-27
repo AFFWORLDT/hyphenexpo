@@ -1,165 +1,152 @@
-# HypGym Dubai - Luxury Mobile App 🏋️‍♂️💎
+# Hyphen Wellness Mobile App
 
-Ultra-luxury fitness mobile app for HypGym Dubai members built with:
-- **Expo** (React Native framework)
-- **TypeScript** (Type safety)
-- **Axios** (API client)
-- **AsyncStorage** (Local storage)
-- **Native React Native Styles** (Beautiful, luxury UI)
+A modern React Native mobile application for the Hyphen Wellness gym management system.
 
-## ✨ Luxury Features
+## Features
 
-✅ **Premium Login Screen** - Beautiful, gradient-based UI with smooth animations  
-✅ **Luxury Dashboard** - VIP member experience with premium design  
-✅ **One-Tap Check-in** - Quick gym check-in functionality  
-✅ **Real-time Stats** - Today, This Week, This Month attendance tracking  
-✅ **Recent Activity** - Check-in history with beautiful timeline  
-✅ **Secure Authentication** - JWT-based auth with AsyncStorage  
-✅ **Pull to Refresh** - Smooth refresh experience  
-✅ **Error Handling** - Graceful error handling with fallbacks  
+- 🔐 Secure authentication with token-based login
+- 📊 Member dashboard with statistics
+- ✅ Gym check-in functionality
+- 📱 Modern, beautiful UI with NativeWind styling
+- 🎨 Branded with Hyphen Wellness logo
+- 🔄 Pull-to-refresh functionality
+- 📈 Check-in history tracking
 
-## 🎨 Design Philosophy
+## Tech Stack
 
-- **Dark Header**: Sleek dark navy background with VIP badge
-- **Gradient Cards**: Beautiful white cards with shadows and elevation
-- **Premium Typography**: Bold, readable fonts with perfect hierarchy
-- **Smooth Animations**: Elegant transitions and interactions
-- **Luxury Color Palette**: 
-  - Primary: #1E293B (Dark Navy)
-  - Accent: #FBBF24 (Premium Gold)
-  - Action: #3B82F6 (Royal Blue)
-  - Success: #10B981 (Emerald Green)
+- **React Native** 0.81.5
+- **Expo** ~54.0.20
+- **TypeScript** 5.9.2
+- **NativeWind** 4.2.1 (Tailwind CSS for React Native)
+- **Axios** for API calls
+- **AsyncStorage** for local data persistence
 
-## 🔐 Demo Credentials
+## Installation
 
-**Member:**
-- Email: `testmember@hypgym.com`
-- Password: `test123`
-
-**Admin:**
-- Email: `admin@hypgym.com`
-- Password: `admin123`
-
-**Reception:**
-- Email: `reception@hypgym.com`
-- Password: `reception123`
-
-## 🚀 Getting Started
-
-### Prerequisites
 ```bash
-npm install -g expo-cli
-```
+# Install dependencies
+npm install
 
-### Install Dependencies
-```bash
-cd expo-app
-npm install --legacy-peer-deps
-```
+# Start the development server
+npm start
 
-### Run the App
-
-**iOS:**
-```bash
+# Run on iOS
 npm run ios
-```
 
-**Android:**
-```bash
+# Run on Android
 npm run android
-```
 
-**Web:**
-```bash
+# Run on Web
 npm run web
 ```
 
-**Start Dev Server:**
-```bash
-npm start
-```
+## API Configuration
 
-## 📱 Project Structure
+The app connects to the backend API at:
+- **Production**: `https://gymapi.capitalharvesters.com/api`
+
+Update the API URL in `src/config/constants.ts` if needed.
+
+## Features
+
+### Authentication
+- Login with email and password
+- Automatic token management
+- Persistent login sessions
+- Secure logout
+
+### Dashboard
+- Welcome screen with user information
+- Statistics for today, this week, and this month
+- Quick check-in button
+- Recent activity feed
+- Profile information display
+
+### Check-in System
+- One-tap gym check-in
+- Check-in history viewing
+- Real-time statistics
+- Pull-to-refresh for latest data
+
+## App Configuration
+
+- **App Name**: Hyphen Wellness
+- **Bundle ID**: com.hyphenwellness.app
+- **Logo**: assets/logo.png
+
+## Test Credentials
+
+- **Member**: testmember@hyphenwellness.com / test123
+- **Admin**: admin@hyphenwellness.com / admin123
+- **Reception**: reception@hyphenwellness.com / reception123
+
+## Project Structure
 
 ```
 expo-app/
 ├── src/
-│   ├── config/
-│   │   └── constants.ts          # API URL configuration
-│   ├── contexts/
-│   │   └── AuthContext.tsx     # Authentication logic
-│   ├── screens/
-│   │   ├── LoginScreen.tsx     # Luxury login UI
-│   │   └── DashboardScreen.tsx  # Premium member dashboard
-│   ├── services/
-│   │   └── api.ts              # Backend API integration
-│   └── types/
-│       └── index.ts            # TypeScript definitions
-├── App.tsx                      # Main app component
-└── package.json                 # Dependencies
+│   ├── config/          # Configuration files
+│   ├── contexts/        # React contexts (Auth)
+│   ├── screens/         # Screen components
+│   ├── services/        # API services
+│   └── types/           # TypeScript types
+├── assets/              # Images and assets
+├── App.tsx              # Main app component
+├── app.json             # Expo configuration
+└── package.json         # Dependencies
 ```
 
-## 🔌 Backend Integration
+## Development
 
-The app connects to: `https://gymapi.capitalharvesters.com/api`
+### Running the App
 
-### API Endpoints Used:
-- `POST /auth/login` - User authentication
-- `GET /checkin/history` - Check-in history
-- `POST /checkin/checkin` - Check in to gym
-- `POST /checkin/checkout/:sessionId` - Check out from gym
+1. Start the Expo development server:
+   ```bash
+   npm start
+   ```
 
-## 🎯 Key Features
+2. Scan the QR code with:
+   - **iOS**: Camera app or Expo Go
+   - **Android**: Expo Go app
 
-### 1. Luxury Login Screen
-- Beautiful gradient background
-- Smooth form inputs with icons
-- Password visibility toggle
-- Demo credentials display
-- Loading states
+### Building for Production
 
-### 2. Premium Dashboard
-- **VIP Header**: Dark navy with gold VIP badge
-- **Stats Cards**: Today, This Week, This Month attendance
-- **Quick Check-in**: One-tap gym check-in
-- **Member Info**: Email, Phone, Role display
-- **Recent Activity**: Timeline of recent check-ins
-- **Pull to Refresh**: Smooth data refresh
+```bash
+# iOS
+eas build --platform ios
 
-### 3. Error Handling
-- Graceful fallbacks on API errors
-- User-friendly error messages
-- Network error detection
-- Empty state handling
-
-## 🔧 Configuration
-
-### API URL
-Edit `src/config/constants.ts`:
-```typescript
-export const API_URL = 'http://3.108.55.246:5001/api';
+# Android
+eas build --platform android
 ```
 
-## 📱 Screenshots
+## API Endpoints
 
-- Luxury login with gradient background
-- Premium dashboard with VIP header
-- Beautiful stats cards with shadows
-- Elegant activity timeline
-- One-tap check-in button
+The app uses the following API endpoints:
 
-## 🛠️ Tech Stack
+- **Authentication**
+  - `POST /auth/login` - User login
+  - `POST /auth/register` - User registration
+  - `GET /auth/profile` - Get user profile
+  - `PUT /auth/profile` - Update profile
 
-- **Expo SDK**: 54
-- **React Native**: 0.81.5
-- **TypeScript**: 5.9.2
-- **Axios**: 1.13.0
-- **AsyncStorage**: 2.2.0
+- **Check-in**
+  - `POST /checkin/checkin` - Check in to gym
+  - `POST /checkin/checkout/:sessionId` - Check out
+  - `GET /checkin/active` - Get active sessions
+  - `GET /checkin/today` - Get today's sessions
+  - `GET /checkin/member/:memberId/history` - Get member history
 
-## 📝 License
+## Recent Updates
 
-MIT License - HypGym Dubai
+✅ Fixed API import paths
+✅ Fixed check-in history endpoint
+✅ Updated authentication handling
+✅ Implemented user ID normalization (id/_id)
+✅ Added Hyphen Wellness branding
+✅ Updated app icon and splash screen
+✅ Enhanced error handling
+✅ Improved dashboard statistics
 
-## 👨‍💻 Development
+## License
 
-Built with ❤️ for HypGym Dubai members
+Copyright © 2024 Hyphen Wellness

@@ -8,6 +8,7 @@ import {
   RefreshControl,
   StyleSheet,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
 import { checkinAPI } from '../services/api';
@@ -30,26 +31,41 @@ export default function DashboardScreen() {
   const fetchMemberData = async () => {
     try {
       setLoading(true);
-      const historyResponse = await checkinAPI.getHistory({ limit: 5 });
-      const historyData = historyResponse?.data?.data || historyResponse?.data || [];
-      setCheckinHistory(Array.isArray(historyData) ? historyData : []);
+      if (!user?.id) {
+        console.error('User ID not available');
+        return;
+      }
+      
+      const historyResponse = await checkinAPI.getHistory(user.id, { limit: 5 });
+      const sessions = historyResponse?.data?.data?.sessions || [];
+      setCheckinHistory(Array.isArray(sessions) ? sessions : []);
+      
+      // Calculate stats from all check-ins, not just the limited ones
+      const allHistoryResponse = await checkinAPI.getHistory(user.id, { limit: 1000 });
+      const allSessions = allHistoryResponse?.data?.data?.sessions || [];
       
       // Calculate stats
-      const today = new Date().toISOString().split('T')[0];
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
       const thisWeek = new Date();
       thisWeek.setDate(thisWeek.getDate() - 7);
+      const thisMonth = new Date();
+      thisMonth.setDate(1);
       
-      const todayCheckins = historyData.filter(
-        (checkin: any) => checkin.checkInTime?.startsWith(today)
+      const todayCheckins = allSessions.filter(
+        (checkin: any) => checkin.checkInTime && new Date(checkin.checkInTime) >= today
       );
-      const weekCheckins = historyData.filter(
-        (checkin: any) => new Date(checkin.checkInTime) > thisWeek
+      const weekCheckins = allSessions.filter(
+        (checkin: any) => checkin.checkInTime && new Date(checkin.checkInTime) >= thisWeek
+      );
+      const monthCheckins = allSessions.filter(
+        (checkin: any) => checkin.checkInTime && new Date(checkin.checkInTime) >= thisMonth
       );
       
       setStats({
         today: todayCheckins.length,
         thisWeek: weekCheckins.length,
-        currentMonth: historyData.length,
+        currentMonth: monthCheckins.length,
       });
     } catch (error) {
       console.error('Error fetching member data:', error);
@@ -101,6 +117,13 @@ export default function DashboardScreen() {
     >
       {/* Luxury Header */}
       <View style={styles.header}>
+        <View style={styles.headerLogoContainer}>
+          <Image 
+            source={require('../../assets/logo.png')} 
+            style={styles.headerLogo}
+            resizeMode="contain"
+          />
+        </View>
         <View style={styles.headerContent}>
           <Text style={styles.welcomeText}>Welcome back,</Text>
           <Text style={styles.nameText}>{user?.firstName} {user?.lastName}</Text>
@@ -255,8 +278,20 @@ const styles = StyleSheet.create({
     shadowRadius: 16,
     elevation: 16,
   },
+  headerLogoContainer: {
+    position: 'absolute',
+    top: 50,
+    left: 24,
+    right: 0,
+    alignItems: 'flex-start',
+  },
+  headerLogo: {
+    width: 40,
+    height: 40,
+  },
   headerContent: {
     flex: 1,
+    marginTop: 20,
   },
   welcomeText: {
     color: '#94A3B8',

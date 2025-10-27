@@ -9,6 +9,7 @@ import {
   ScrollView,
   Alert,
   StyleSheet,
+  Image,
 } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -47,9 +48,13 @@ export default function LoginScreen() {
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.logoContainer}>
-              <Text style={styles.logoEmoji}>⚡</Text>
+              <Image 
+                source={require('../../assets/logo.png')} 
+                style={styles.logoImage}
+                resizeMode="contain"
+              />
             </View>
-            <Text style={styles.title}>Welcome to HypGym Dubai</Text>
+            <Text style={styles.title}>Welcome to Hyphen Wellness</Text>
             <Text style={styles.subtitle}>Sign in to your account to continue</Text>
           </View>
 
@@ -130,9 +135,9 @@ export default function LoginScreen() {
           {/* Demo Credentials */}
           <View style={styles.credentialsBox}>
             <Text style={styles.credentialsTitle}>✅ Verified Working Credentials:</Text>
-            <Text style={styles.credentialsItem}>🔐 Member: testmember@hypgym.com / test123</Text>
-            <Text style={styles.credentialsItem}>👤 Admin: admin@hypgym.com / admin123</Text>
-            <Text style={styles.credentialsItem}>🏢 Reception: reception@hypgym.com / reception123</Text>
+            <Text style={styles.credentialsItem}>🔐 Member: testmember@hyphenwellness.com / test123</Text>
+            <Text style={styles.credentialsItem}>👤 Admin: admin@hyphenwellness.com / admin123</Text>
+            <Text style={styles.credentialsItem}>🏢 Reception: reception@hyphenwellness.com / reception123</Text>
             <Text style={styles.credentialsNote}>
               💡 Or create a new account by clicking "Sign up here"
             </Text>
@@ -163,21 +168,21 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   logoContainer: {
-    width: 64,
-    height: 64,
-    backgroundColor: '#2563EB',
-    borderRadius: 12,
+    width: 80,
+    height: 80,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 8,
   },
-  logoEmoji: {
-    fontSize: 32,
+  logoImage: {
+    width: 80,
+    height: 80,
   },
   title: {
     fontSize: 28,

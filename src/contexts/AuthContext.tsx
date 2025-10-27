@@ -34,7 +34,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (storedToken && storedUser) {
         const userData = JSON.parse(storedUser);
-        setUser(userData);
+        // Handle both id and _id fields
+        const userWithId = {
+          ...userData,
+          id: userData.id || userData._id,
+          _id: userData._id || userData.id,
+        };
+        setUser(userWithId);
         setToken(storedToken);
         setIsAuthenticated(true);
       }
@@ -50,10 +56,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const response = await authAPI.login({ email, password });
       const { user: userData, token: authToken } = response.data.data;
 
-      await AsyncStorage.setItem('token', authToken);
-      await AsyncStorage.setItem('user', JSON.stringify(userData));
+      // Handle both id and _id fields
+      const userWithId = {
+        ...userData,
+        id: userData.id || userData._id,
+        _id: userData._id || userData.id,
+      };
 
-      setUser(userData);
+      await AsyncStorage.setItem('token', authToken);
+      await AsyncStorage.setItem('user', JSON.stringify(userWithId));
+
+      setUser(userWithId);
       setToken(authToken);
       setIsAuthenticated(true);
 
@@ -69,10 +82,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const response = await authAPI.register(userData);
       const { user: newUser, token: authToken } = response.data.data;
 
-      await AsyncStorage.setItem('token', authToken);
-      await AsyncStorage.setItem('user', JSON.stringify(newUser));
+      // Handle both id and _id fields
+      const userWithId = {
+        ...newUser,
+        id: newUser.id || newUser._id,
+        _id: newUser._id || newUser.id,
+      };
 
-      setUser(newUser);
+      await AsyncStorage.setItem('token', authToken);
+      await AsyncStorage.setItem('user', JSON.stringify(userWithId));
+
+      setUser(userWithId);
       setToken(authToken);
       setIsAuthenticated(true);
 
@@ -96,8 +116,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const response = await authAPI.updateProfile(userData);
       const updatedUser = response.data.data.user;
       
-      await AsyncStorage.setItem('user', JSON.stringify(updatedUser));
-      setUser(updatedUser);
+      // Handle both id and _id fields
+      const userWithId = {
+        ...updatedUser,
+        id: updatedUser.id || updatedUser._id,
+        _id: updatedUser._id || updatedUser.id,
+      };
+      
+      await AsyncStorage.setItem('user', JSON.stringify(userWithId));
+      setUser(userWithId);
       
       return { success: true };
     } catch (error: any) {
