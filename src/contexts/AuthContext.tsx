@@ -25,32 +25,57 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Check for existing token on mount
   useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
-    try {
-      const storedToken = await AsyncStorage.getItem('token');
-      const storedUser = await AsyncStorage.getItem('user');
-      
-      if (storedToken && storedUser) {
-        const userData = JSON.parse(storedUser);
-        // Handle both id and _id fields
-        const userWithId = {
-          ...userData,
-          id: userData.id || userData._id,
-          _id: userData._id || userData.id,
-        };
-        setUser(userWithId);
-        setToken(storedToken);
-        setIsAuthenticated(true);
+    let timeoutId: NodeJS.Timeout;
+    let isMounted = true;
+    
+    const checkAuthAsync = async () => {
+      try {
+        const storedToken = await AsyncStorage.getItem('token');
+        const storedUser = await AsyncStorage.getItem('user');
+        
+        if (!isMounted) return;
+        
+        if (storedToken && storedUser) {
+          const userData = JSON.parse(storedUser);
+          // Handle both id and _id fields
+          const userWithId = {
+            ...userData,
+            id: userData.id || userData._id,
+            _id: userData._id || userData.id,
+          };
+          setUser(userWithId);
+          setToken(storedToken);
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error('Error checking auth:', error);
+        // Clear invalid data
+        if (isMounted) {
+          await AsyncStorage.removeItem('token');
+          await AsyncStorage.removeItem('user');
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
       }
-    } catch (error) {
-      console.error('Error checking auth:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    // Set a timeout to ensure loading always completes
+    timeoutId = setTimeout(() => {
+      if (isMounted) {
+        console.warn('Auth check timeout - forcing loading to false');
+        setLoading(false);
+      }
+    }, 3000); // 3 second timeout
+
+    checkAuthAsync();
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
   const login = async (email: string, password: string) => {
     try {
@@ -155,8 +180,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         user,
         token,
-        isAuthenticated,
-        loading,
+        isAuthenticated: Boolean(isAuthenticated),
+        loading: Boolean(loading),
         login,
         logout,
         register,

@@ -70,6 +70,42 @@ export const membersAPI = {
     api.get(`/members/${id}`),
 };
 
+// Admin API
+export const adminAPI = {
+  getStats: () => api.get('/admin/stats'),
+  getActivities: (params?: any) => api.get('/admin/activities', { params }),
+};
+
+// Trainers API
+export const trainersAPI = {
+  getAll: (params?: any) => api.get('/trainers', { params }),
+  getById: (id: string) => api.get(`/trainers/${id}`),
+  getStats: (id?: string) => api.get(`/trainers/${id}/stats`),
+};
+
+// Staff API
+export const staffAPI = {
+  getAll: (params?: any) => api.get('/staff', { params }),
+  getById: (id: string) => api.get(`/staff/${id}`),
+};
+
+// Sessions API
+export const sessionsAPI = {
+  getAll: (params?: any) => api.get('/sessions', { params }),
+  getByMember: (memberId: string, params?: any) =>
+    api.get(`/sessions/member/${memberId}`, { params }),
+  getTodayStats: () => api.get('/sessions/stats/today'),
+};
+
+// Training Sessions API
+export const trainingSessionsAPI = {
+  getAll: (params?: any) => api.get('/training-sessions', { params }),
+  getByTrainer: (trainerId: string, params?: any) =>
+    api.get(`/training-sessions/trainer/${trainerId}`, { params }),
+  getByMember: (memberId: string, params?: any) =>
+    api.get(`/training-sessions/member/${memberId}`, { params }),
+};
+
 // Memberships API
 export const membershipsAPI = {
   getMyMemberships: () =>
@@ -95,6 +131,51 @@ export const checkinAPI = {
   
   getHistory: (memberId: string, params?: any) =>
     api.get(`/checkin/member/${memberId}/history`, { params }),
+};
+
+// Equipment API
+export const equipmentAPI = {
+  getAll: (params?: any) => api.get('/equipment', { params }),
+  getById: (id: string) => api.get(`/equipment/${id}`),
+};
+
+// Classes API
+export const classesAPI = {
+  getAll: (params?: any) => api.get('/classes', { params }),
+  getById: (id: string) => api.get(`/classes/${id}`),
+};
+
+// Payments API
+export const paymentsAPI = {
+  getAll: (params?: any) => api.get('/payments', { params }),
+  getById: (id: string) => api.get(`/payments/${id}`),
+};
+
+// Appointments API
+export const appointmentsAPI = {
+  getAll: (params?: any) => api.get('/appointments', { params }),
+  getById: (id: string) => api.get(`/appointments/${id}`),
+  create: (data: any) => api.post('/appointments', data),
+  update: (id: string, data: any) => api.put(`/appointments/${id}`, data),
+};
+
+// Packages API
+export const packagesAPI = {
+  getAll: (params?: any) => api.get('/packages', { params }),
+  getById: (id: string) => api.get(`/packages/${id}`),
+};
+
+// Invoices API
+export const invoicesAPI = {
+  getAll: (params?: any) => api.get('/invoices', { params }),
+  getById: (id: string) => api.get(`/invoices/${id}`),
+};
+
+// Notifications API
+export const notificationsAPI = {
+  getAll: (params?: any) => api.get('/notifications', { params }),
+  markAsRead: (id: string) => api.put(`/notifications/${id}/read`),
+  markAllAsRead: () => api.put('/notifications/mark-all-read'),
 };
 
 export default api;
